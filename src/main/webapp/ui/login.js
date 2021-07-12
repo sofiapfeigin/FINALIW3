@@ -1,9 +1,9 @@
 let moduloLogin=angular.module('iw3',['ngStorage', 'oitozero.ngSweetAlert'])
 
 
-    .constant('URL_API_BASE', 'http://localhost:8080/api/v1/')
+    .constant('URL_API_BASE', 'http://localhost:8080/api/final/')
     .constant('URL_BASE', 'http://localhost:8080/')
-    .constant('URL_WS', '/api/v1/ws')
+    .constant('URL_WS', '/api/final/ws')
 
 moduloLogin.controller('loginController', function($scope, $localStorage, $http){
 
@@ -29,7 +29,7 @@ moduloLogin.controller('loginController', function($scope, $localStorage, $http)
                           console.log(resp.data);
                           $localStorage.userdata=resp.data;
                           $localStorage.logged=true;
-                          window.location.replace("http://localhost:8080/index2.html");
+                          window.location.replace("http://localhost:8080");
                       }else{
                           console.log("No se pudo loguear.");
                           alert("Los datos ingresados son incorrectos.");

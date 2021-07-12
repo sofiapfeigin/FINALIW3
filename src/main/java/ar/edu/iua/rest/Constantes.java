@@ -15,6 +15,7 @@ public final class Constantes {
 	
 	public static final String URL_AUTH_INFO = "/auth-info";
 	public static final String URL_LOGOUT = "/logout-token";
+	public static final String URL_WEBSOCKET_ENPOINT=URL_BASE + "/ws";
 	
 	
 	
