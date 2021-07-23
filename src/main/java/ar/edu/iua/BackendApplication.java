@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 
+
 @SpringBootApplication
 public class BackendApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
@@ -22,6 +23,8 @@ public class BackendApplication extends SpringBootServletInitializer implements 
 	
 		SpringApplication.run(BackendApplication.class, args);
 
+		
+		
 	}
 	
 	@Autowired

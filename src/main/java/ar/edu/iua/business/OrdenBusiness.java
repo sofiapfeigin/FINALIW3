@@ -37,7 +37,7 @@ public class OrdenBusiness implements IOrdenBusiness {
 
 	@Override
 	public RespuestaGenerica<Orden> recibirEstadoUno(Orden orden) throws BusinessException {
-
+		System.out.println(orden.getNumeroOrden());
 		MensajeRespuesta m = new MensajeRespuesta();
 		RespuestaGenerica<Orden> rg = new RespuestaGenerica<Orden>(orden, m);
 

@@ -9,7 +9,7 @@ moduloLogin.controller('loginController', function($scope, $localStorage, $http)
 
     //Si se llegó al login, me aseguro que se borren los datos del localstorage ya que no hay nadie logueado
     delete $localStorage.userdata;
-    $localStorage.logged=false;
+    localStorage.setItem("logged","false");
 
     //Valido cuando se presiona el botón para iniciar sesión
     $scope.validar = function (){
@@ -28,7 +28,7 @@ moduloLogin.controller('loginController', function($scope, $localStorage, $http)
                       if(resp.status===200) {
                           console.log(resp.data);
                           $localStorage.userdata=resp.data;
-                          $localStorage.logged=true;
+                          localStorage.setItem("logged","true");
                           window.location.replace("http://localhost:8080");
                       }else{
                           console.log("No se pudo loguear.");

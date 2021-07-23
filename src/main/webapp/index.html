@@ -47,16 +47,40 @@
             <h5 class="card-title"> Estado: {{estado}} </h5>
             <hr>
             <p>Numero de orden:<input type="text" ng-model='orden' id="orden">
-                Camion:<input type="text" ng-model='camion' id="camion" pattern="[0-9]+">
-                Chofer:<input type="text" ng-model='chofer' id="chofer">
-                Cliente:<input type="text" ng-model='cliente' id="cliente"></p>
-            <p>Producto:<input type="text" ng-model='producto' id="producto">
+
+            </p>
+            <p>
+                <h5 style="color: rgb(20, 101, 133);">CAMION</h5> 
+                Código externo:<input type="text" ng-model='codExternoCamion' id="codExternoCamion">&nbsp&nbsp&nbsp
+                Patente:<input type="text" ng-model='patente' id="patente">&nbsp&nbsp&nbsp
+                Cisternado:<input type="text" placeholder="cisterna 1" ng-model='cist1' id="cist1">
+                <input type="text" placeholder="cisterna 2" ng-model='cist2' id="cist2">
+            </p>
+            <p>
+                <h5 style="color: rgb(20, 101, 133);">CHOFER</h5> 
+                Código externo:<input type="text" ng-model='codExternoChofer' id="codExternoChofer">&nbsp&nbsp&nbsp
+                DNI:<input type="text" ng-model='dniChofer' id="dniChofer">
+
+            </p>
+            <p>
+                <h5 style="color: rgb(20, 101, 133);">CLIENTE</h5> 
+                Código externo:<input type="text" ng-model='codExternoCliente' id="codExternoCliente">&nbsp&nbsp&nbsp
+                Razón Social:<input type="text" ng-model='cliente' id="cliente">
+            </p>
+            <p>
+                <h5 style="color: rgb(20, 101, 133);">PRODUCTO</h5> 
+                Código externo:<input type="text" ng-model='codExternoProducto' id="codExternoProducto">&nbsp&nbsp&nbsp
+                Nombre:<input type="text" ng-model='producto' id="producto">
+                
+            </p>
+
+            <p>
                 Fecha prevista de carga: <input type="text" ng-model='dia' id="dia" maxlength="2" size="1"
                     placeholder="dd"> /
                 <input type="text" ng-model='mes' id="mes" maxlength="2" size="1" placeholder="mm"> /
                 <input type="text" ng-model='anio' id="anio" maxlength="4" size="2" placeholder="yyyy"> -
                 <input type="text" ng-model='hora' id="hora" maxlength="2" size="1" placeholder="hh"> :
-                <input type="text" ng-model='min' id="min" maxlength="2" size="1" placeholder="mm">
+                <input type="text" ng-model='min' id="min" maxlength="2" size="1" placeholder="mm">&nbsp&nbsp&nbsp
                 Preset:<input type="text" ng-model='preset' id="preset">
                 <button class="btn btn-primary" ng-click='cambiarEstado1()' id="estado1">Guardar</button>
             </p>
@@ -97,7 +121,8 @@
             </div>
 
             <br>
-            <button class="btn btn-primary" ng-click='cambiarEstado3()' id="estado3" disabled>Guardar</button>
+            <button class="btn btn-primary" ng-click='cargarCamion()' id="estado3" disabled>Guardar</button>
+            <button class="btn btn-warning" style="display: none;" ng-click='cerrarOrden()' id="btnCerrar">Cerrar Orden</button>
             <hr>
             <p>Pesaje final:<input type="text" ng-model='pesajeFinal' id="pesajeFinal" disabled>
                 <button class="btn btn-primary" ng-click='cambiarEstado4()' id="estado4" disabled>Guardar</button>
@@ -105,8 +130,6 @@
                     style="display: none;" id="conciliacion">Ver conciliacion
                 </button>
             </p>
-            <button class="btn btn-danger" ng-click='cerrarOrden()' id="cerrarOrden" style="display: none;">Cerrar
-                Orden</button>
 
 
 

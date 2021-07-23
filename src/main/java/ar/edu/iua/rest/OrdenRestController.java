@@ -39,7 +39,7 @@ public class OrdenRestController {
 	public ResponseEntity<MensajeRespuesta> load(@RequestBody Orden orden) {
 
 		try {
-
+			System.out.println(orden.getNumeroOrden());
 			MensajeRespuesta m = ordenBusiness.recibirEstadoUno(orden).getMensaje();
 			if (m.getCodigo() == 0) {
 				return new ResponseEntity<MensajeRespuesta>(m, HttpStatus.OK);
