@@ -29,6 +29,7 @@ moduloLogin.controller('loginController', function($scope, $localStorage, $http)
                           console.log(resp.data);
                           $localStorage.userdata=resp.data;
                           localStorage.setItem("logged","true");
+                          localStorage.setItem("token",resp.data.authtoken);
                           window.location.replace("http://localhost:8080");
                       }else{
                           console.log("No se pudo loguear.");

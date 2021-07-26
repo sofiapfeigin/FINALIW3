@@ -12,24 +12,31 @@ app.controller('controllerPedidos', function ($scope, $http) {
     //$rootScope.stomp = $stomp;
 
     //Verifico si el usuario está logueado, y si no está logueado lo redirecciono a la página de login
-    // if (localStorage.getItem("logged") != "true")
-    // 	window.location.replace("/login.html");
+    if (localStorage.getItem("logged") != "true")
+    	window.location.replace("/login.html");
 
     var orden, camion, chofer, cliente, producto, mes, dia, anio, hora, min, preset, bttn1, bttn2, cerrarOrden, pesajeInicial, password,
         masa, densidad, temp, caudal, bttn3, bttn4, pesajeFinal, conciliacion, groupSelect, progress;
     var inicio = 0;
     var timeout = 0;
     //Obtengo el token del usuario
+    
 
-    //let token = $localStorage.userdata.authtoken;
+    var token = localStorage.getItem("token");
     var fecha = new Date();
 
     $scope.estado = 0;
     $scope.progreso = '0%'
-
+	console.log(token);
     $scope.cerrarSesion = function () {
         localStorage.setItem("logged", "false");
+        localStorage.setItem("token", "");
         window.location.replace("/login.html");
+    }
+    
+    $scope.verOrdenes = function () {
+       
+        window.location.replace("/ordenes.html");
     }
 
     $scope.cambiarEstado1 = function () {
@@ -58,6 +65,7 @@ app.controller('controllerPedidos', function ($scope, $http) {
             validar(cisternado1.value) && validar(cisternado2.value) && validar(chofer.value) && cliente.value != "" && producto.value != "" && codExternoProducto.value != ""
             && codExternoCliente.value != "" && codExternoChofer.value != "" && codExternoCamion.value != "") {
             if (validarFecha(dia.value, mes.value, anio.value, hora.value, min.value)) {
+				
                 orden.disabled = true;
                 codExternoCamion.disabled = true;
                 patente.disabled = true;
@@ -117,7 +125,7 @@ app.controller('controllerPedidos', function ($scope, $http) {
                     url: 'http://localhost:8080/api/final/ordenes/ingresoOrden',
                     headers: {
                         'Content-Type': 'application/json',
-                        'xauthtoken': 'eDcxNDkxcG5VcHlCRjBUU3VmQVBNQT09OnlZdXRCNlAzakV6NTNBU2JsMURLdmc9PQ'
+                        'xauthtoken': token
                     },
                     data: data
 
@@ -157,6 +165,7 @@ app.controller('controllerPedidos', function ($scope, $http) {
             groupSelect.disabled = true;
 
             masa = document.getElementById('masa');
+            frecuencia=document.getElementById('inputGroupSelect01');
             masa.disabled = false;
             densidad = document.getElementById('densidad');
             densidad.disabled = false;
@@ -169,6 +178,7 @@ app.controller('controllerPedidos', function ($scope, $http) {
             var data = {
                 'pesajeInicial': parseInt(pesajeInicial.value),
                 'password': parseInt(password.value),
+                'frecuenciaAlmacenamiento': parseInt(frecuencia.value)
 
             };
 
@@ -177,7 +187,7 @@ app.controller('controllerPedidos', function ($scope, $http) {
                 url: 'http://localhost:8080/api/final/ordenes/pesajeInicial/'+orden.value,
                 headers: {
                     'Content-Type': 'application/json',
-                    'xauthtoken': 'eDcxNDkxcG5VcHlCRjBUU3VmQVBNQT09OnlZdXRCNlAzakV6NTNBU2JsMURLdmc9PQ'
+                    'xauthtoken': token
                 },
                 data: data
 
@@ -236,7 +246,7 @@ app.controller('controllerPedidos', function ($scope, $http) {
                 url: 'http://localhost:8080/api/final/detallesOrdenes/cargarCamion/'+orden.value,
                 headers: {
                     'Content-Type': 'application/json',
-                    'xauthtoken': 'eDcxNDkxcG5VcHlCRjBUU3VmQVBNQT09OnlZdXRCNlAzakV6NTNBU2JsMURLdmc9PQ'
+                    'xauthtoken': token
                 },
                 data: data
 
@@ -272,7 +282,7 @@ app.controller('controllerPedidos', function ($scope, $http) {
             url: 'http://localhost:8080/api/final/ordenes/cerrarOrden/'+orden.value,
             headers: {
             'Content-Type': 'application/json',
-            'xauthtoken': 'eDcxNDkxcG5VcHlCRjBUU3VmQVBNQT09OnlZdXRCNlAzakV6NTNBU2JsMURLdmc9PQ'
+            'xauthtoken': token
             }
         
         };
@@ -303,7 +313,7 @@ app.controller('controllerPedidos', function ($scope, $http) {
                 url: 'http://localhost:8080/api/final/ordenes/pesajeFinal/'+orden.value,
                 headers: {
                     'Content-Type': 'application/json',
-                    'xauthtoken': 'eDcxNDkxcG5VcHlCRjBUU3VmQVBNQT09OnlZdXRCNlAzakV6NTNBU2JsMURLdmc9PQ'
+                    'xauthtoken': token
                 },
                 data: data
 
@@ -322,20 +332,20 @@ app.controller('controllerPedidos', function ($scope, $http) {
         $http(req).then(
             function (resp) {
                 if (resp.status === 200) {
-                    console.log(req);
+                    console.log(resp.status);
 
                     alert("exito");
                 } else {
-                    console.log(req);
+                    console.log(resp.status);
                     console.log("No se pudo pasar al estado 1.");
-                    alert("Los datos ingresados son incorrectos.");
+                    alert("Error");
                 }
             },
             function (respErr) {
 
-                console.log(req);
+                console.log(respErr.status);
                 console.log("No se pudo pasar al estado 1.");
-                alert("Los datos ingresados son incorrectos.");
+                alert("Error");
             }
         );
 
@@ -364,6 +374,7 @@ function LeadingZero(Time) {
 
 function validar(num) {
 
+	console.log(num);
     if (isNaN(num) || num < 0) {
 
         return false;

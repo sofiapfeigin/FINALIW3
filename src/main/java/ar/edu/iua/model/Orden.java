@@ -38,6 +38,9 @@ public class Orden implements Serializable {
 	@ApiModelProperty(notes="Peso del camion cargado", required=false)
 	@Column()
 	private double pesajeFinal;
+	@ApiModelProperty(notes="Frecuencia de almacenamiento", required=false)
+	@Column()
+	private int frecuenciaAlmacenamiento;
 
 	@ApiModelProperty(notes="Camion de la orden", required=true)
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -189,6 +192,16 @@ public class Orden implements Serializable {
 
 	public void setTurno(Date turno) {
 		this.turno = turno;
+	}
+	
+	
+
+	public int getFrecuenciaAlmacenamiento() {
+		return frecuenciaAlmacenamiento;
+	}
+
+	public void setFrecuenciaAlmacenamiento(int frecuenciaAlmacenamiento) {
+		this.frecuenciaAlmacenamiento = frecuenciaAlmacenamiento;
 	}
 
 	public Date getFechaHoraPesajeInicial() {

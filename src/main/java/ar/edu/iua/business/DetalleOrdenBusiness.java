@@ -105,7 +105,7 @@ public class DetalleOrdenBusiness implements IDetalleOrdenBusiness {
 				System.out.println("Time in minutes: " + minutes + " minutes.");
 				System.out.println("Time in hours: " + hours + " hours.");
 
-				if (seconds < 60) // Si pasaron menos de 60 segundos solo actualizamos la orden
+				if (seconds < orden.getFrecuenciaAlmacenamiento()) // Si pasaron menos de 60 segundos solo actualizamos la orden
 				{
 
 					orden.setUltimaMasaAcumulada(detalleOrden.getMasaAcumulada());

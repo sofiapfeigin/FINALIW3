@@ -90,6 +90,7 @@ public class OrdenBusiness implements IOrdenBusiness {
 			ordenVieja.setPesajeInicial(orden.getPesajeInicial());
 			ordenVieja.setPassword(orden.getPassword());
 			ordenVieja.setEstado(2);
+			ordenVieja.setFrecuenciaAlmacenamiento(orden.getFrecuenciaAlmacenamiento());
 			ordenVieja.setFechaHoraPesajeInicial(new Date());
 			ordenDAO.save(ordenVieja);
 		} catch (Exception e) {
