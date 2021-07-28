@@ -122,6 +122,8 @@
             <div class="crono_wrapper" style="color: red;">
                 Tiempo transcurrido <h6 id='crono'>00:00:00</h6>
             </div>
+           
+            <p>ETA:{{eta}} hs.</p>
 
             <br>
             <button class="btn btn-primary" ng-click='cargarCamion()' id="estado3" disabled>Guardar</button>
@@ -129,7 +131,7 @@
             <hr>
             <p>Pesaje final:<input type="text" ng-model='pesajeFinal' id="pesajeFinal" disabled>
                 <button class="btn btn-primary" ng-click='cambiarEstado4()' id="estado4" disabled>Guardar</button>
-                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#dialogo1"
+                <button type="button" class="btn btn-link" ng-click='verConciliacion()'
                     style="display: none;" id="conciliacion">Ver conciliacion
                 </button>
             </p>
@@ -157,8 +159,8 @@
                                 Ultimo valor de masa acumulada: {{masa}} <br>
                                 Neto por valanza: {{pesajeFinal- pesajeInicial}} <br>
                                 Diferencia entre valanza y caudalimentro: {{pesajeFinal- pesajeInicial - masa}} <br>
-                                Promedio de temperatura: <br>
-                                Promedio del caudal: <br>
+                                Promedio de temperatura: {{promedioTemp}}<br>
+                                Promedio del caudal: {{promedioCaudal}} <br>
                             </div>
 
                             <!-- pie del diálogo -->
@@ -196,13 +198,13 @@
                         {{ estado }}
                     </td>
                     <td>
-                        {{ camion}}
+                        {{ patente}}
                     </td>
                     <td>
                         {{preset}}
                     </td>
                     <td>
-                        {{cargaActual}}
+                        {{masa}}
                     </td>
                     <td>
                         {{temp}}
@@ -217,58 +219,6 @@
             </tbody>
         </table>
     </div>
-
-    <div class="container-fluid" style="font-size: 12px;">
-        <p style=" font-size: 20px;">Listado de ordenes</p>
-        <table class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">numero de orden</th>
-                    <th scope="col">estado</th>
-                    <th scope="col">preset</th>
-                    <th scope="col">pesaje inicial</th>
-                    <th scope="col">pesaje final</th>
-                    <th scope="col">temp final</th>
-                    <th scope="col">masa acumulada final</th>
-                    <th scope="col">dens final</th>
-                    <th scope="col">caudal final</th>
-                    <th scope="col"></th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat='p in datos'>
-                    <td>
-                        {{ p.estado }}
-                    </td>
-                    <td>
-                        {{p.camion}}
-                    </td>
-                    <td>
-                        {{p.preset}}
-                    </td>
-                    <td>
-                        {{p.cargaFinal}}
-                    </td>
-                    <td>
-                        {{p.tempFinal}}
-                    </td>
-                    <td>
-                        {{p.densFinal}}
-                    </td>
-                    <td>
-                        {{p.caudFinal}}
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#dialogo1"
-                            id="conciliacion">
-                            Ver detalles</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
 
     <!-- <div ng-controller='controller1'>
             {{titulo}}

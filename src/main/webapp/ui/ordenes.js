@@ -22,7 +22,7 @@ app.controller('verOrdenes', function($scope, $http) {
 		window.location.replace("/login.html");
 
 	}
-	
+
 	$scope.inicio = function() {
 		window.location.replace("/index.html");
 
@@ -44,7 +44,7 @@ app.controller('verOrdenes', function($scope, $http) {
 		function(resp) {
 			if (resp.status === 200) {
 				$scope.Ordenes = resp.data;
-				$scope.total=$scope.Ordenes.length;
+				$scope.total = $scope.Ordenes.length;
 
 				console.log($scope.Ordenes.lenght);
 			} else {
@@ -57,6 +57,29 @@ app.controller('verOrdenes', function($scope, $http) {
 			alert("No se pueden obtener las ordenes");
 		}
 	);
+
+	$scope.ordenarporOrdenAscendente = function() {
+		console.log($scope.Ordenes);
+		$scope.Ordenes.sort(function(a, b) { return (a.numeroOrden-b.numeroOrden ); });
+
+	}
+	$scope.ordenarporOrdenDescendente = function() {
+		console.log($scope.Ordenes);
+		$scope.Ordenes.sort(function(a, b) { return (b.numeroOrden-a.numeroOrden ); });
+
+	}
+	
+		$scope.ordenarporEstadoAscendente = function() {
+		console.log($scope.Ordenes);
+		$scope.Ordenes.sort(function(a, b) { return (a.estado-b.estado ); });
+
+	}
+	$scope.ordenarporEstadoDescendiente = function() {
+		console.log($scope.Ordenes);
+		$scope.Ordenes.sort(function(a, b) { return (b.estado-a.estado ); });
+
+	}
+
 
 	$scope.verConciliacion = function(i) {
 
@@ -71,6 +94,8 @@ app.controller('verOrdenes', function($scope, $http) {
 			$scope.masa = $scope.Ordenes[i].ultimaMasaAcumulada;
 			$scope.masa = $scope.Ordenes[i].ultimaMasaAcumulada;
 			$scope.masa = $scope.Ordenes[i].ultimaMasaAcumulada;
+			$scope.promedioTemp = $scope.Ordenes[i].promedioTemperatura;
+			$scope.promedioCaudal = $scope.Ordenes[i].promedioCaudal;
 		}
 
 

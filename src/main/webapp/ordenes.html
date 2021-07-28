@@ -43,8 +43,20 @@
 		<table id="tabla1" class="table table-dark table-striped">
 			<thead>
 				<tr>
-					<th scope="col">numero de orden</th>
-					<th scope="col">estado</th>
+					<th scope="col">
+						<button type="button" class="btn btn-success btn-mini" id="num " ng-click="ordenarporOrdenAscendente()"><img src="ui/sort-numeric-down.svg" style="width: 20px; height: 20px;">
+						</button>
+						numero de orden
+						<button type="button" class="btn btn-success btn-mini" ng-click="ordenarporOrdenDescendente()"><img src="ui/sort-numeric-down-alt.svg" style="width: 20px; height: 20px;">
+						</button>
+					</th>
+					<th scope="col">
+					<button type="button" id="num " class="btn btn-success btn-mini" ng-click="ordenarporEstadoAscendente()"><img src="ui/sort-numeric-down.svg"  style="width: 20px; height: 20px;">
+						</button>
+						estado
+					<button type="button" class="btn btn-success btn-mini" ng-click="ordenarporEstadoDescendiente()"><img src="ui/sort-numeric-down-alt.svg" style="width: 20px; height: 20px;">
+						</button>
+					</th>
 					<th scope="col">preset</th>
 					<th scope="col">pesaje inicial</th>
 					<th scope="col">pesaje final</th>
@@ -114,8 +126,8 @@
 						Ultimo valor de masa acumulada: {{masa}} <br>
 						Neto por valanza: {{pesajeFinal- pesajeInicial}} <br>
 						Diferencia entre valanza y caudalimentro: {{pesajeFinal- pesajeInicial - masa}} <br>
-						Promedio de temperatura: <br>
-						Promedio del caudal: <br>
+						Promedio de temperatura:{{promedioTemp}} <br>
+						Promedio del caudal: {{promedioCaudal}}<br>
 					</div>
 
 					<!-- pie del diálogo -->
