@@ -1,5 +1,6 @@
 package ar.edu.iua.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -89,6 +91,14 @@ public class Orden implements Serializable {
 	@ApiModelProperty(notes="Password de 5 digitos. Generada aleatoriamente", required=false)
 	@Column(length = 5)
 	private int password;
+	
+	@OneToMany(targetEntity=Alarma.class, mappedBy="orden", fetch = FetchType.LAZY)
+	@JsonBackReference
+	@ApiModelProperty(notes = "Lista de todas las alarmas que se activaron durante esta orden", required = false)
+	private List<Alarma> alarmasList;
+	
+	@ApiModelProperty(notes = "Bandera que indica si ya hay una alarma encendida, para no enviar multiples alarmas", required = false)
+	private boolean tieneAlarmaEncendida = false;
 
 	
 	@Column()
@@ -109,6 +119,8 @@ public class Orden implements Serializable {
 	private double promedioTemperatura;
 	@Column()
 	private double promedioCaudal;
+	
+	private float temperaturaMaxima = 80;
 
 	public int getId() {
 		return id;
@@ -307,6 +319,15 @@ public class Orden implements Serializable {
 	public void setPromedioCaudal(double promedioCaudal) {
 		this.promedioCaudal = promedioCaudal;
 	}
+	
+	public boolean isTieneAlarmaEncendida() {
+		return tieneAlarmaEncendida;
+	}
+
+	public void setTieneAlarmaEncendida(boolean tieneAlarmaEncendida) {
+		this.tieneAlarmaEncendida = tieneAlarmaEncendida;
+	}
+
 
 	public String checkBasicDataStatusOne() {
 
@@ -389,6 +410,14 @@ public class Orden implements Serializable {
 		if(orden.getEstado()!=2)
 			return "No se pueden cerrar ordenes con estado 1";
 		return "Ok para cerrar orden";
+	}
+
+	public float getTemperaturaMaxima() {
+		return temperaturaMaxima;
+	}
+
+	public void setTemperaturaMaxima(float temperaturaMaxima) {
+		this.temperaturaMaxima = temperaturaMaxima;
 	}
 	
 

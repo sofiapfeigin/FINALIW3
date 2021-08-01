@@ -130,7 +130,7 @@ public class DetalleOrden implements Serializable {
 			return "La densidad debe ser entre 0 y 1";
 		if (getTemperatura() == 0)
 			return "El atributo temperatura es obligatorio";
-		if (getTemperatura() < 0 || getTemperatura() > 40)
+		if (getTemperatura() < 0 || getTemperatura() > 100)
 			return "La temperatura debe ser mayor a 0 y menor que 40 grados.";
 		if(orden.getPreset() < getMasaAcumulada())
 			return "Detalle de orden invalido porque la masa acumulada excede el preset";

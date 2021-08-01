@@ -34,6 +34,9 @@ public class OrdenBusiness implements IOrdenBusiness {
 
 	@Autowired
 	private OrdenRepository ordenDAO;
+	
+	private float temperaturaMaxima = 80;
+	
 
 	@Override
 	public RespuestaGenerica<Orden> recibirEstadoUno(Orden orden) throws BusinessException {
@@ -217,7 +220,16 @@ public class OrdenBusiness implements IOrdenBusiness {
 
 			return rg;
 		}
+		
+	public float getTemperaturaMaxima() {
+		return temperaturaMaxima; 
 	}
+
+	public void cambiarUmbralTemperatura(Float temp) {
+		temperaturaMaxima = temp;
+	}
+	
+}
 
 	
 	

@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import ar.edu.iua.business.exception.BusinessException;
 import ar.edu.iua.business.exception.NotFoundException;
+import ar.edu.iua.eventos.OrdenEvent;
 import ar.edu.iua.model.DetalleOrden;
 import ar.edu.iua.model.Orden;
 import ar.edu.iua.model.dto.MensajeRespuesta;
@@ -30,7 +32,10 @@ public class DetalleOrdenBusiness implements IDetalleOrdenBusiness {
 	private DetalleOrdenRepository detalleOrdenDAO;
 	@Autowired
 	private OrdenRepository ordenDAO;
-
+	
+	
+	
+	
 	@Override
 	public DetalleOrden load(long id) throws BusinessException, NotFoundException {
 		Optional<DetalleOrden> detalleOrden = null;
@@ -105,7 +110,8 @@ public class DetalleOrdenBusiness implements IDetalleOrdenBusiness {
 				System.out.println("Time in minutes: " + minutes + " minutes.");
 				System.out.println("Time in hours: " + hours + " hours.");
 
-				if (seconds < orden.getFrecuenciaAlmacenamiento()) // Si pasaron menos de 60 segundos solo actualizamos la orden
+				if (seconds < orden.getFrecuenciaAlmacenamiento()) // Si pasaron menos de 60 segundos solo actualizamos
+																	// la orden
 				{
 
 					orden.setUltimaMasaAcumulada(detalleOrden.getMasaAcumulada());
@@ -115,6 +121,17 @@ public class DetalleOrdenBusiness implements IDetalleOrdenBusiness {
 					orden.setFechaHoraInicioCarga(
 							detalleOrdenDAO.findByFechaHoraMedicionAsc(orden.getId()).getFechaHoraMedicion());
 					orden.setFechaHoraFinCarga(detalleOrden.getFechaHoraMedicion());
+					
+					//Si no tiene la alarma encendida, verifico si hay que generar alguna alarma
+					//Si hay una alarma encendida no entro ya que no se pueden generar dos alarmas en simultaneo
+					if(!orden.isTieneAlarmaEncendida()) {
+						if (orden.getUltimaTemperatura()>orden.getTemperaturaMaxima()) {
+							generaEvento(orden, OrdenEvent.Tipo.TEMPERATURA_MAXIMA);
+							orden.setTieneAlarmaEncendida(true);
+						}
+					}
+					
+					
 				}
 
 				else // Guardamos el detalle orden y actualizamos la orden
@@ -128,6 +145,13 @@ public class DetalleOrdenBusiness implements IDetalleOrdenBusiness {
 							detalleOrdenDAO.findByFechaHoraMedicionAsc(orden.getId()).getFechaHoraMedicion());
 					orden.setFechaHoraFinCarga(detalleOrden.getFechaHoraMedicion());
 					orden.setFechaHoraUltimoAlmacenamiento(new Date());
+					
+					if(!orden.isTieneAlarmaEncendida()) {
+						if (orden.getUltimaTemperatura()>orden.getTemperaturaMaxima()){
+							generaEvento(orden, OrdenEvent.Tipo.TEMPERATURA_MAXIMA);
+							orden.setTieneAlarmaEncendida(true);
+						}
+					}
 				}
 
 			} else {
@@ -139,6 +163,16 @@ public class DetalleOrdenBusiness implements IDetalleOrdenBusiness {
 				orden.setFechaHoraFinCarga(detalleOrden.getFechaHoraMedicion());
 				orden.setFechaHoraUltimoAlmacenamiento(detalleOrden.getFechaHoraMedicion());
 				detalleOrdenDAO.save(detalleOrden);
+				
+				//Si no tiene la alarma encendida, verifico si hay que generar alguna alarma
+				//Si hay una alarma encendida no entro ya que no se pueden generar dos alarmas en simultaneo
+				if(!orden.isTieneAlarmaEncendida()) {
+					if (orden.getUltimaTemperatura()> orden.getTemperaturaMaxima()) {
+						generaEvento(orden, OrdenEvent.Tipo.TEMPERATURA_MAXIMA);
+						orden.setTieneAlarmaEncendida(true);
+					}
+				}
+				
 			}
 
 			ordenDAO.save(orden);
@@ -148,5 +182,15 @@ public class DetalleOrdenBusiness implements IDetalleOrdenBusiness {
 
 		return rg;
 	}
+	
+	
+	@Autowired
+	private ApplicationEventPublisher appEventPublisher;
+	private void generaEvento(Orden orden, OrdenEvent.Tipo tipo) {
+		appEventPublisher.publishEvent(new OrdenEvent(orden, tipo));
+	}
+	
+
+	
 
 }
