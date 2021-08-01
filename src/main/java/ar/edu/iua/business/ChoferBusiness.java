@@ -17,6 +17,21 @@ public class ChoferBusiness implements IChoferBusiness {
 
 	@Autowired
 	private ChoferRepository choferDAO;
+	
+	
+	@Override
+	public Chofer load(Long id) throws BusinessException, NotFoundException {
+		Optional<Chofer> op;
+		try {
+			op = choferDAO.findById(id);
+
+		} catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		if (!op.isPresent())
+			throw new NotFoundException("No se encuentra el chofer con Id =" + id);
+		return op.get();
+	}
 
 	@Override
 	public Chofer load(long id, long dni) throws NotFoundException, BusinessException {
@@ -127,6 +142,19 @@ public class ChoferBusiness implements IChoferBusiness {
 			c = new Chofer(chofer);
 		}
 		return choferDAO.save(c);
+		
+	}
+	
+	@Override
+	public Chofer findByCodigoExterno(String c) throws NotFoundException, BusinessException {
+		
+		Optional<Chofer> op=choferDAO.findByCodigoexterno(c);
+		
+		if(!op.isPresent()) {
+			throw new NotFoundException("No se encuentra el chofer con el codigo externo =" + c);
+		}
+		
+		return op.get();
 	}
 
 }

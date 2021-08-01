@@ -22,4 +22,8 @@ public interface IChoferBusiness {
 
 	public Chofer asegurarChofer(Chofer chofer) throws BusinessException;
 
+	Chofer load(Long id) throws BusinessException, NotFoundException;
+
+	Chofer findByCodigoExterno(String c) throws NotFoundException, BusinessException;
+
 }

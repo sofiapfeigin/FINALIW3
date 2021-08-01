@@ -19,6 +19,17 @@ public class Rol {
 	
 	@Column(length = 250, nullable = true)
 	private String descripcion;
+	
+	public Rol() {
+		super();
+	}
+
+	public Rol(Integer id, String rol, String descripcion) {
+		super();
+		this.id = id;
+		this.rol = rol;
+		this.descripcion = descripcion;
+	}
 
 	public Integer getId() {
 		return id;

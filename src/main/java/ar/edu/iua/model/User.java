@@ -28,6 +28,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Table(name = "users")
 public class User implements Serializable, UserDetails {
 
+	
+
 	public Integer getId() {
 		return id;
 	}
@@ -221,6 +223,23 @@ public class User implements Serializable, UserDetails {
 
 	public void setSessionTimeout(int sessionTimeout) {
 		this.sessionTimeout = sessionTimeout;
+	}
+	
+	public User(int id, String nombre, String apellido, String email, String password, String username,
+			Rol rolPrincipal, boolean enabled) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.email = email;
+		this.password = password;
+		this.username = username;
+		this.rolPrincipal = rolPrincipal;
+		this.enabled = enabled;
+	}
+	
+	public User() {
+		
 	}
 
 }

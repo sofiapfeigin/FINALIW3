@@ -8,6 +8,9 @@ import ar.edu.iua.business.exception.NotFoundException;
 import ar.edu.iua.model.Producto;
 
 public interface IProductoBusiness {
+	
+	
+	Producto findById(Long id)throws NotFoundException, BusinessException;
 
 	public Producto load(long id, String nombre) throws NotFoundException, BusinessException;
 
@@ -22,5 +25,6 @@ public interface IProductoBusiness {
 	public Producto load(String codigoExterno) throws NotFoundException, BusinessException;
 
 	public Producto asegurarProducto(Producto producto) throws BusinessException;
+	Producto findByCodigoExterno(String p)throws NotFoundException, BusinessException;
 
 }

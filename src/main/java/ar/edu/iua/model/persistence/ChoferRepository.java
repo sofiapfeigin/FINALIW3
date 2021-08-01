@@ -14,6 +14,7 @@ public interface ChoferRepository extends JpaRepository<Chofer, Long>{
 	Optional<Chofer> findByDni(long dni);
 	Optional<Chofer> findByDniAndId(long dni,long id);
 	Optional<Chofer> findFirstByCodigoexterno(String codigoExterno);
+	Optional<Chofer> findByCodigoexterno(String codigoExterno);
 	
 	
 }

@@ -133,5 +133,31 @@ public class ProductoRestController {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Producto> load(@PathVariable("id") Long id) {
+		
+		try {
+			return new ResponseEntity<Producto>(productoBusiness.findById(id),HttpStatus.OK); 
+		}catch (NotFoundException e) {
+			return new ResponseEntity<Producto>(HttpStatus.NOT_FOUND);
+		}catch (BusinessException e) {
+			return new ResponseEntity<Producto>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+	@GetMapping(value = "/ce/{codigoExterno}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Producto> findByCodigoExterno(@PathVariable("codigoExterno") String codigoExterno) {
+		
+		try {
+			return new ResponseEntity<Producto>(productoBusiness.findByCodigoExterno(codigoExterno),HttpStatus.OK); 
+		}catch (NotFoundException e) {
+			return new ResponseEntity<Producto>(HttpStatus.NOT_FOUND);
+		}catch (BusinessException e) {
+			return new ResponseEntity<Producto>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
 
 }

@@ -17,6 +17,23 @@ public class ProductoBusiness implements IProductoBusiness {
 
 	@Autowired
 	private ProductoRepository productoDAO;
+	
+	
+	public Producto findById(Long id) throws NotFoundException, BusinessException {
+		Optional<Producto> op;
+		
+		try {
+			op = productoDAO.findById(id);
+		}catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		
+		if(!op.isPresent()) {
+			throw new NotFoundException("No se encontro ningun producto con el siguiente identificador: "+ id);
+		}
+		
+		return op.get();
+	}
 
 	@Override
 	public Producto load(long id, String nombre) throws NotFoundException, BusinessException {
@@ -122,5 +139,17 @@ public class ProductoBusiness implements IProductoBusiness {
 		}
 		return productoDAO.save(p);
 	}
+	
+	public Producto findByCodigoExterno(String c) throws NotFoundException, BusinessException {
+		
+		Optional<Producto> op=productoDAO.findByCodigoexterno(c);
+		
+		if(!op.isPresent()) {
+			throw new NotFoundException("No se encuentra el producto con el codigo externo =" + c);
+		}
+		
+		return op.get();
+	}
+
 
 }
