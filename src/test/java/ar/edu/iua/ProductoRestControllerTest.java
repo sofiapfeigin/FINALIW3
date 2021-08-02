@@ -62,7 +62,7 @@ public class ProductoRestControllerTest {
     	
     	when(productoMock.load(id)).thenReturn(ResponseEntity.ok(productoDescContains));
     	
-    	mvc.perform(get("/api/v1/productos/"+id)
+    	mvc.perform(get("/api/final/productos/"+id)
     			.param("xauthtoken", token)
     			.contentType(MediaType.APPLICATION_JSON))
     			.andDo(print())
@@ -82,7 +82,7 @@ public class ProductoRestControllerTest {
     	
     	when(productoMock.findByCodigoExterno(codigoExterno)).thenReturn(ResponseEntity.ok(productoDescContains));
     	
-    	mvc.perform(get("/api/v1/productos/ce/"+codigoExterno)
+    	mvc.perform(get("/api/final/productos/ce/"+codigoExterno)
     			.param("xauthtoken", token)
     			.contentType(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
@@ -92,7 +92,7 @@ public class ProductoRestControllerTest {
     
     private String getToken() {
     	Rol admin = new Rol(1, "Admin", "Testing del sistema");
-    	User u = new User(2, "Pablo", "Gatti", "pgatti114@alumnos.iua.edu.ar", "1234", "pablogatti", admin, true);
+    	User u = new User(2, "Jessica", "Lopez", "jlopez375@alumnos.iua.edu.ar", "123", "jlopez", admin, true);
     	u.setRoles(new HashSet<Rol>());
     	u.getRoles().add(admin);
     	
