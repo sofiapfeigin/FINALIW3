@@ -23,7 +23,7 @@ public interface IOrdenBusiness {
 	public List<Orden> list() throws BusinessException;
 	public RespuestaGenerica<Orden> cerrarOrden(int nroOrden) throws BusinessException,NotFoundException;
 	
-	
+	public void pushOrderData();
 	
 
 }

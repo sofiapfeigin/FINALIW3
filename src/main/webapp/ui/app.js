@@ -1,4 +1,4 @@
-let app = angular.module('iw3', [])
+let app = angular.module('iw3', ['ngStomp'])
 
 
 	.constant('URL_API_BASE', 'http://localhost:8080/api/final/')
@@ -6,11 +6,9 @@ let app = angular.module('iw3', [])
 	.constant('URL_WS', '/api/final/ws')
 var inicio = 0;
 var timeout = 0;
-app.controller('controllerPedidos', function($scope, $http) {
+app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) {
 
-
-	//Valido cuando se presiona el botón para iniciar sesión
-	//$rootScope.stomp = $stomp;
+	$rootScope.stomp = $stomp;
 
 	//Verifico si el usuario está logueado, y si no está logueado lo redirecciono a la página de login
 	if (localStorage.getItem("logged") != "true")
@@ -41,6 +39,64 @@ app.controller('controllerPedidos', function($scope, $http) {
 		window.location.replace("/ordenes.html");
 	}
 
+	//Inicio el Web Socket para cargar
+	/*wsService.initStompClient('/iw3/data', function(payload,
+		headers, res) {
+
+		let resSplit = res.toString().split("\n");
+		let respuesta = resSplit[resSplit.length - 1];
+
+		//Si incluye "TYPE=" es porque es una alarma
+
+		if (respuesta.includes("TYPE=")) {
+			let tipo = respuesta.split("TYPE=")[1];
+			respuesta = respuesta.split("TYPE=")[0];
+			$scope.nroOrden = respuesta.split("orden ")[1].split(" ")[0];
+			$scope.motivoAlarma = respuesta;
+			let titulo = "";
+			let logoAlarma = "error";
+
+			if (tipo == "excesoTemp")
+				titulo = "Exceso de Temperatura detectado"
+
+
+			//Muestro la alarma 
+			SweetAlert.swal({
+				title: titulo,
+				text: respuesta,
+				type: logoAlarma,
+				showCancelButton: false,
+				confirmButtonColor: "#FF0000",
+				confirmButtonText: "Aceptar alarma",
+				closeOnConfirm: true
+			},
+				function() {
+					$scope.aceptarAlarma();
+				});
+		}
+	}, $scope.stomp);*/
+
+	/*$scope.aceptarAlarma = function() {
+		let req = {
+			method: 'POST',
+			url: 'http://localhost:8080/api/final/alarmas?xauthtoken=' + token,
+			headers: { 'Content-Type': 'application/json' },
+			data: { "usuarioQueAcepto": { "id": $localStorage.userdata.idUser }, "orden": { "nroOrden": $scope.nroOrden }, "motivoAlarma": $scope.motivoAlarma }
+		};
+		$http(req).then(
+			function(resp) {
+				if (resp.status === 201) {
+					console.log("Alarma almacenada");
+				} else {
+					console.log("Error al guardar la alarma.");
+				}
+			},
+			function(respErr) {
+				console.log("Error al guardar la alarma.");
+			}
+		);
+	}
+*/
 	$scope.cambiarEstado1 = function() {
 
 		orden = document.getElementById('orden');
@@ -98,9 +154,9 @@ app.controller('controllerPedidos', function($scope, $http) {
 				$scope.estado = 1;
 				$scope.progreso = '25%'
 				$('#bar').css('width', 25 + '%');
-				
-				var h=parseInt(hora.value)+3;
-				var fecha=anio.value+"-"+mes.value+"-"+dia.value+"T"+h+":"+min.value+":00Z";
+
+				var h = parseInt(hora.value) + 3;
+				var fecha = anio.value + "-" + mes.value + "-" + dia.value + "T" + h + ":" + min.value + ":00Z";
 				console.log(fecha);
 				var data = {
 					'numeroOrden': parseInt(orden.value),
@@ -302,9 +358,9 @@ app.controller('controllerPedidos', function($scope, $http) {
 		caudal.disabled = true;
 		btnCerrar = document.getElementById('btnCerrar');
 		btnCerrar.disabled = true;
-		
+
 		clearTimeout(timeout);
-        timeout = 0;
+		timeout = 0;
 	}
 
 	$scope.cambiarEstado4 = function() {
@@ -342,47 +398,46 @@ app.controller('controllerPedidos', function($scope, $http) {
 			$scope.Ejecutar(req);
 
 
-			
 
-			
+
+
 
 		}
 		else
 			window.alert("Los datos ingresados no son correctos");
 
 	}
-	
-	$scope.verConciliacion=function()
-	{
-		var Orden={};
+
+	$scope.verConciliacion = function() {
+		var Orden = {};
 		var req2 = {
-				method: 'GET',
-				url: 'http://localhost:8080/api/final/ordenes/'+orden.value,
-				headers: {
-					'Content-Type': 'application/json',
-					'xauthtoken': token
-				},
-			};
+			method: 'GET',
+			url: 'http://localhost:8080/api/final/ordenes/' + orden.value,
+			headers: {
+				'Content-Type': 'application/json',
+				'xauthtoken': token
+			},
+		};
 
-			$http(req2).then(
-				function(resp) {
-					if (resp.status === 200) {
-						Orden=resp.data;
-						console.log(Orden);
-						$scope.promedioTemp = Orden.promedioTemperatura;
-						$scope.promedioCaudal = Orden.promedioCaudal;
-						$('#dialogo1').modal('show');
+		$http(req2).then(
+			function(resp) {
+				if (resp.status === 200) {
+					Orden = resp.data;
+					console.log(Orden);
+					$scope.promedioTemp = Orden.promedioTemperatura;
+					$scope.promedioCaudal = Orden.promedioCaudal;
+					$('#dialogo1').modal('show');
 
-					} else {
-						console.log(req);
-						alert("No se pudo obtener la orden");
-					}
-				},
-				function(respErr) {
-
+				} else {
+					console.log(req);
 					alert("No se pudo obtener la orden");
 				}
-			);
+			},
+			function(respErr) {
+
+				alert("No se pudo obtener la orden");
+			}
+		);
 	}
 
 	$scope.Ejecutar = function(req) {
@@ -408,7 +463,50 @@ app.controller('controllerPedidos', function($scope, $http) {
 
 	}
 
+
+
 });
+
+
+//Módulo encargado de gestionar el Web Socket
+/*app.factory('wsService',
+	function($rootScope, URL_WS) {
+
+		var fnConfig = function(stomp, topic, cb) {
+			stomp.subscribe(topic, function(payload, headers, res) {
+				cb(payload, headers, res);
+			});
+		};
+		return {
+			initStompClient: function(topic, cb, stomp) {
+
+
+				stomp.setDebug(function(args) {
+
+					if (stomp.sock.readyState > 1) {
+						fnConnect();
+					}
+				});
+				var fnConnect = function() {
+
+					if (localStorage.getItem("logged") == "true") {
+						stomp.connect(URL_WS + "?xauthtoken=" + localStorage.getItem("token")).then(function(frame) {
+							fnConfig(stomp, topic, cb);
+						});
+					} else {
+						console.log("No existen credenciales para presentar en WS")
+					}
+				};
+				fnConnect();
+			},
+			stopStompClient: function() {
+				if (stomp)
+					stomp.disconnect();
+			}
+		}
+
+	});*/
+
 function funcionando() {
 	// obteneos la fecha actual
 	var actual = new Date().getTime();
