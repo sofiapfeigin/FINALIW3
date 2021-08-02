@@ -78,22 +78,43 @@ app.controller('controllerPedidos', function($scope, $rootScope,wsService, $stom
 	}, $scope.stomp);
 
 	$scope.aceptarAlarma = function() {
-		let req = {
+
+		
+		var req = {
 			method: 'POST',
-			url: 'http://localhost:8080/api/final/alarmas?xauthtoken=' + token,
-			headers: { 'Content-Type': 'application/json' },
-			data: { "usuarioQueAcepto": { "id": "1" }, "orden": { "nroOrden": $scope.nroOrden }, "motivoAlarma": $scope.motivoAlarma }
+			url: 'http://localhost:8080/api/final/alarmas',
+			headers: {
+				'Content-Type': 'application/json',
+				'xauthtoken': token
+			},
+			data: {
+				'motivoAlarma': $scope.motivoAlarma,
+				'orden':{
+					'numeroOrden':$scope.orden
+				},
+				'usuarioQueAcepto':{
+					'id': 1,
+				}
+			
+			}
+
+
 		};
 		$http(req).then(
 			function(resp) {
 				if (resp.status === 201) {
-					console.log("Alarma almacenada");
+					
 				} else {
-					console.log("Error al guardar la alarma.");
+					console.log(resp.status);
+					alert("Error");
+					ok = false;
 				}
 			},
 			function(respErr) {
-				console.log("Error al guardar la alarma.");
+
+				console.log(respErr.status);
+				alert("Error");
+				ok = false;
 			}
 		);
 	}
@@ -447,14 +468,15 @@ app.controller('controllerPedidos', function($scope, $rootScope,wsService, $stom
 				if (resp.status === 200) {
 					
 				} else {
-					console.log(resp.status);
+					
+					console.log(req);
 					alert("Error");
 					ok = false;
 				}
 			},
 			function(respErr) {
 
-				console.log(respErr.status);
+				console.log(req);
 				alert("Error");
 				ok = false;
 			}

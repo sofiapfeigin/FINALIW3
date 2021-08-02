@@ -23,10 +23,14 @@ import ar.edu.iua.business.IAlarmaBusiness;
 import ar.edu.iua.business.exception.BusinessException;
 import ar.edu.iua.business.exception.NotFoundException;
 import ar.edu.iua.model.Alarma;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
 
+@RestController
+@RequestMapping(value = Constantes.URL_ALARMAS)
+@Api(value = "Alarmas", description = "Operaciones relacionadas con las alarmas", tags = { "Alarmas" })
 public class AlarmaRestController {
 	
 
@@ -85,7 +89,7 @@ private Logger log = LoggerFactory.getLogger(this.getClass());
 		try {
 			alarmaBusiness.save(alarma);
 			HttpHeaders responseHeaders = new HttpHeaders();
-			responseHeaders.set("location", Constantes.URL_CHOFERES + "/" + alarma.getIdAlarma());
+			responseHeaders.set("location", Constantes.URL_ALARMAS + "/" + alarma.getIdAlarma());
 			return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
 		} catch (BusinessException e) {
 			log.error(e.getMessage(), e);

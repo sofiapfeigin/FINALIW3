@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
 
 import ar.edu.iua.business.exception.BusinessException;
 import ar.edu.iua.business.exception.NotFoundException;
@@ -16,6 +17,7 @@ import ar.edu.iua.model.persistence.AlarmaRepository;
 import ar.edu.iua.model.persistence.OrdenRepository;
 import ar.edu.iua.model.persistence.UserRepository;
 
+@Service
 public class AlarmaBusiness implements IAlarmaBusiness {
 
 
@@ -55,7 +57,7 @@ public class AlarmaBusiness implements IAlarmaBusiness {
 	public Alarma save(Alarma alarma) throws BusinessException {
 		try {
 			Optional<User> u = userDAO.findById(alarma.getUsuarioQueAcepto().getId());
-			Optional<Orden> o = ordenDAO.findById(alarma.getOrden().getNumeroOrden());
+			Optional<Orden> o = ordenDAO.findByNumeroOrden(alarma.getOrden().getNumeroOrden());
 			if(u.isPresent() && o.isPresent()) {
 				Orden or = o.get();
 				or.setTieneAlarmaEncendida(false);
