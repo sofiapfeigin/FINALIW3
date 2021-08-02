@@ -6,7 +6,7 @@ let app = angular.module('iw3', ['ngStomp'])
 	.constant('URL_WS', '/api/final/ws')
 var inicio = 0;
 var timeout = 0;
-app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) {
+app.controller('controllerPedidos', function($scope, $rootScope,wsService, $stomp, $http) {
 
 	$rootScope.stomp = $stomp;
 
@@ -14,6 +14,7 @@ app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) 
 	if (localStorage.getItem("logged") != "true")
 		window.location.replace("/login.html");
 
+	
 	var orden, camion, chofer, cliente, producto, mes, dia, anio, hora, min, preset, bttn1, bttn2, cerrarOrden, pesajeInicial, password,
 		masa, densidad, temp, caudal, bttn3, bttn4, pesajeFinal, conciliacion, groupSelect, progress, ok;
 	//Obtengo el token del usuario
@@ -40,7 +41,7 @@ app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) 
 	}
 
 	//Inicio el Web Socket para cargar
-	/*wsService.initStompClient('/iw3/data', function(payload,
+	wsService.initStompClient('/iw3/data', function(payload,
 		headers, res) {
 
 		let resSplit = res.toString().split("\n");
@@ -61,7 +62,7 @@ app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) 
 
 
 			//Muestro la alarma 
-			SweetAlert.swal({
+			swal({
 				title: titulo,
 				text: respuesta,
 				type: logoAlarma,
@@ -74,14 +75,14 @@ app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) 
 					$scope.aceptarAlarma();
 				});
 		}
-	}, $scope.stomp);*/
+	}, $scope.stomp);
 
-	/*$scope.aceptarAlarma = function() {
+	$scope.aceptarAlarma = function() {
 		let req = {
 			method: 'POST',
 			url: 'http://localhost:8080/api/final/alarmas?xauthtoken=' + token,
 			headers: { 'Content-Type': 'application/json' },
-			data: { "usuarioQueAcepto": { "id": $localStorage.userdata.idUser }, "orden": { "nroOrden": $scope.nroOrden }, "motivoAlarma": $scope.motivoAlarma }
+			data: { "usuarioQueAcepto": { "id": "1" }, "orden": { "nroOrden": $scope.nroOrden }, "motivoAlarma": $scope.motivoAlarma }
 		};
 		$http(req).then(
 			function(resp) {
@@ -96,7 +97,7 @@ app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) 
 			}
 		);
 	}
-*/
+	
 	$scope.cambiarEstado1 = function() {
 
 		orden = document.getElementById('orden');
@@ -444,9 +445,7 @@ app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) 
 		$http(req).then(
 			function(resp) {
 				if (resp.status === 200) {
-					console.log(resp.status);
-					ok = true;
-					alert("exito");
+					
 				} else {
 					console.log(resp.status);
 					alert("Error");
@@ -469,7 +468,7 @@ app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) 
 
 
 //Módulo encargado de gestionar el Web Socket
-/*app.factory('wsService',
+app.factory('wsService',
 	function($rootScope, URL_WS) {
 
 		var fnConfig = function(stomp, topic, cb) {
@@ -505,7 +504,7 @@ app.controller('controllerPedidos', function($scope, $rootScope, $stomp, $http) 
 			}
 		}
 
-	});*/
+	});
 
 function funcionando() {
 	// obteneos la fecha actual
